@@ -45,7 +45,7 @@ fn1('other type'); // TypeError: user must be User
 
 Somehow both JavaScript and TypeScript don't satisfy this common need:
 
-* **JavaScript** — no type validation at all for function arguments, not even for simple types like string, number, boolean, etc.
+* **JavaScript** — no type definitions or validation at all for function arguments, not even for simple types like string, number, boolean, etc.
 * **TypeScript** — compile-time types, erased at runtime, also adds a lot of development time, because of complex type definitions.
 * **jstf** — simple types and custom classes for function arguments validated at runtime.
 
