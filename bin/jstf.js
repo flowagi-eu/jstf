@@ -10,7 +10,7 @@ import * as esbuild from "esbuild";
 const [, , entry, ...args] = process.argv;
 
 if (!entry) {
-  console.error("Usage: jstf <script.js> [args...]");
+  console.error("Usage: jstf <script.jstf> [args...]");
   process.exit(1);
 }
 
