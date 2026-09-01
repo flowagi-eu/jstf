@@ -25,7 +25,7 @@ function add(a, b) {
 ```
 
 ### Also supports custom classes:
-```
+```js
 class User {
    id = 1
 }
