@@ -1,3 +1,5 @@
+#### (Currently Experimental Stage)
+
 jstf: Simple Types and Custom Classes for NodeJS Functions.
 # Write better JavaScript, Keep it simple, and actually enforce types of function arguments at runtime.
 
