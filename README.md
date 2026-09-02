@@ -1,4 +1,4 @@
-#### Currently Experimental
+#### Currently Experimental, for https://nyno.dev (v10, coming soon)
 
 # Run JavaScript/TypeScript without strict rules + runtime type checking for functions (using @CheckAtRuntime)
 
