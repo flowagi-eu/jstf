@@ -2,7 +2,7 @@
 
 # jstf
 
-### Node.js with TypeScript syntax, without strict rules, plus optional runtime type checking.
+### Run JavaScript/TypeScript without strict rules + runtime type checking for functions (using @CheckAtRuntime)
 
 jstf lets you use TypeScript syntax directly in Node.js without requiring types everywhere or enforcing a strict TypeScript workflow.
 
