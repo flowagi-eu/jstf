@@ -39,7 +39,7 @@ greet(123); // runs normally
 * `.ts` / `.tsx` with ESM imports
 * In-memory esbuild transpilation
 * `@CheckAtRuntime` for runtime type checking
-* `.env` support
+* Automatically loads .env from the script directory
 * Source maps in `.source-map/`
 * Normal Node.js `process.argv`
 
