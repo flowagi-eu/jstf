@@ -1,4 +1,6 @@
+.source-map
 # Logs
+.ascend
 logs
 *.log
 npm-debug.log*

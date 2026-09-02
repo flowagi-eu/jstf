@@ -5,15 +5,10 @@
   "bin": {
     "jstf": "./bin/jstf.js"
   },
-
-
   "dependencies": {
- "esbuild": "0.28.2"
-},
-
-
-
-
+    "esbuild": "0.28.2",
+    "typescript": "^7.0.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

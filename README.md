@@ -1,70 +1,64 @@
-#### (Currently Experimental Stage)
+#### Currently Experimental
 
-jstf: Simple Types and Custom Classes for NodeJS Functions.
-# Write better JavaScript, Keep it simple, and actually enforce types of function arguments at runtime.
+# jstf
 
-jstf is a super tiny superset of Node.js that adds optional runtime type validation to function arguments.
+### Node.js with TypeScript syntax, without strict rules, plus optional runtime type checking.
 
-It supports simple built-in types like `string`, `number`, and `boolean`, as well as custom classess.
+jstf lets you use TypeScript syntax directly in Node.js without requiring types everywhere or enforcing a strict TypeScript workflow.
 
-```js
-function add(a: number, b: number) {
-    return a + b;
+It transpiles `.ts` and `.tsx` files in memory using esbuild and otherwise behaves like normal Node.js.
+
+When you want runtime type checking, use `@CheckAtRuntime`:
+
+```ts
+@CheckAtRuntime
+function greet(user: User, name: string) {
+    console.log(`Hello ${name}`);
 }
+
+greet(new User(), "John");
+
+greet("wrong", 123);
+// TypeError: user must be User
 ```
 
-jstf transpiles this into JavaScript AND adds runtime checks:
+Without `@CheckAtRuntime`, types are optional and are simply transpiled away:
 
-```js
-function add(a, b) {
-    if (typeof a !== "number") throw new TypeError();
-    if (typeof b !== "number") throw new TypeError();
-
-    return a + b;
+```ts
+function greet(name: string) {
+    console.log(name);
 }
+
+greet(123); // runs normally
 ```
 
-### There's also support for custom classes:
-```js
-class User {
-   id = 1
-}
+### Features
 
-function fn1(user: User) {
-	console.log(user);
-}
-
-fn1(new User());
-
-fn1('other type'); // TypeError: user must be User
-
-```
-
-
-### Why?
-
-Somehow both JavaScript and TypeScript don't satisfy this common need:
-
-* **JavaScript** — no type definitions or validation at all for function arguments, not even for simple types like string, number, boolean, etc.
-* **TypeScript** — compile-time types, erased at runtime, also adds a lot of development time, because of complex type definitions.
-* **jstf** — simple types and custom classes for function arguments validated at runtime.
-
-Unlike TypeScript, jstf only focuses on function arguments. Variables and return values remain normal JavaScript.
-
-We're trying to avoid building a type system that leads to wasting time through micromanagement, and instead remain practical by focusing only on typed function arguments only.
-
-The runtime overhead per function call is very small and generally negligible compared to real-world work such as HTTP requests, database queries, and heavy I/O.
+* TypeScript syntax in Node.js
+* No strict typing rules
+* `.ts` / `.tsx` with ESM imports
+* In-memory esbuild transpilation
+* `@CheckAtRuntime` for runtime type checking
+* `.env` support
+* Source maps in `.source-map/`
+* Normal Node.js `process.argv`
 
 ### Usage
-```
-jstf yourscript.jstf
+
+```bash
+jstf server.ts arg1 arg2
 ```
 
 ### Install
-```
+
+```bash
 git clone https://github.com/flowagi-eu/jstf
-npm install # for esbuild
-npm link # for 'jstf' command
+cd jstf
+npm install
+npm link
 ```
 
+### Philosophy
+
+**Use TypeScript syntax when you want it. Keep JavaScript's freedom. Add runtime type checking fast on-demand without needing additional libraries.**
 
