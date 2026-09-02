@@ -294,37 +294,76 @@ function findCheckAtRuntime(source, start) {
  * Find decorated function
  * ---------------------------------------------------------------------------
  */
-
 function findDecoratedFunction(source, decoratorStart) {
   let i = decoratorStart + "@CheckAtRuntime".length;
 
   /*
-   * Allow whitespace/comments between decorator and function.
+   * Allow whitespace/comments between decorator and declaration.
    */
   i = skipWhitespaceAndComments(source, i);
 
   /*
-   * Only support:
+   * Supported declarations:
    *
    *   function foo(...)
+   *   async function foo(...)
+   *   export function foo(...)
+   *   export async function foo(...)
    *
-   * for now.
+   * We deliberately only support declarations, not:
    *
-   * This avoids accidentally transforming unrelated syntax.
+   *   const foo = async (...) => {}
+   *   const foo = function (...) {}
+   *
+   * Those can be added separately if needed.
    */
-  if (!source.startsWith("function", i)) {
+
+  const declarationStart = i;
+
+  /*
+   * Optional `export`.
+   */
+  if (isKeywordAt(source, i, "export")) {
+    i += "export".length;
+    i = skipWhitespaceAndComments(source, i);
+  }
+
+  /*
+   * Optional `default`.
+   *
+   * This also allows:
+   *
+   *   export default function foo(...)
+   *
+   *   export default async function foo(...)
+   */
+  if (isKeywordAt(source, i, "default")) {
+    i += "default".length;
+    i = skipWhitespaceAndComments(source, i);
+  }
+
+  /*
+   * Optional `async`.
+   */
+  if (isKeywordAt(source, i, "async")) {
+    i += "async".length;
+    i = skipWhitespaceAndComments(source, i);
+  }
+
+  /*
+   * The declaration must ultimately be a function.
+   */
+  if (!isKeywordAt(source, i, "function")) {
     return null;
   }
 
-  const functionStart = i;
-
   i += "function".length;
-
-  i = skipWhitespaceAndComments(source, i);
 
   /*
    * Optional generator `*`.
    */
+  i = skipWhitespaceAndComments(source, i);
+
   if (source[i] === "*") {
     i++;
     i = skipWhitespaceAndComments(source, i);
@@ -332,6 +371,8 @@ function findDecoratedFunction(source, decoratorStart) {
 
   /*
    * Function name.
+   *
+   * Function declarations normally have a name, so require one.
    */
   const nameStart = i;
 
@@ -398,7 +439,20 @@ function findDecoratedFunction(source, decoratorStart) {
   }
 
   return {
-    functionStart,
+    /*
+     * IMPORTANT:
+     *
+     * Start at `export` / `async` / `function`, rather than
+     * always starting at `function`.
+     *
+     * This causes the rewritten source to preserve:
+     *
+     *   export
+     *   async
+     *   export async
+     */
+    functionStart: declarationStart,
+
     paramsStart,
     paramsEnd,
     bodyStart: i,
@@ -406,6 +460,45 @@ function findDecoratedFunction(source, decoratorStart) {
   };
 }
 
+
+/*
+ * ---------------------------------------------------------------------------
+ * Keyword helper
+ * ---------------------------------------------------------------------------
+ *
+ * Unlike source.startsWith(), this makes sure we found a complete keyword.
+ *
+ * For example:
+ *
+ *   exportFunction
+ *
+ * must NOT match `export`.
+ */
+
+function isKeywordAt(source, index, keyword) {
+  if (!source.startsWith(keyword, index)) {
+    return false;
+  }
+
+  const before = source[index - 1];
+  const after = source[index + keyword.length];
+
+  if (
+    before !== undefined &&
+    isIdentifierPart(before)
+  ) {
+    return false;
+  }
+
+  if (
+    after !== undefined &&
+    isIdentifierPart(after)
+  ) {
+    return false;
+  }
+
+  return true;
+}
 
 /*
  * ---------------------------------------------------------------------------
