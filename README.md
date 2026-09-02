@@ -30,6 +30,14 @@ function greet(name: string) {
 greet(123); // runs normally
 ```
 
+### Benefits
+
+* **No compilation step** — run your TypeScript directly with no separate build or compile process.
+* **Built on Node.js** — keep using the stable, production-proven JavaScript runtime, currently Node.js v24.
+* **Runtime type checking when you want it** — add a single `@CheckAtRuntime` decorator to TypeScript functions to immediately validate their arguments at runtime.
+* **TypeScript without the strictness** — use TypeScript syntax while keeping the flexibility and simplicity of JavaScript.
+
+
 ### Features
 
 * TypeScript syntax in Node.js
