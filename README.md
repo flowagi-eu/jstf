@@ -58,5 +58,7 @@ npm link
 
 ### Philosophy
 
-**Use TypeScript syntax when you want it. Keep JavaScript's freedom. Add runtime type checking fast on-demand without needing additional libraries.**
+- Use TypeScript syntax when you want it. 
+- Keep JavaScript's freedom.
+- Quickly add runtime type checking without learning additional libraries.
 
